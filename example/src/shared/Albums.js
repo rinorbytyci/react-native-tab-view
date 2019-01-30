@@ -2,7 +2,8 @@
 /* eslint-disable import/no-commonjs */
 
 import * as React from 'react';
-import { ScrollView, Image, Dimensions, StyleSheet } from 'react-native';
+import { Image, Dimensions, StyleSheet } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const COVERS = [
   require('../../assets/album-art-1.jpg'),

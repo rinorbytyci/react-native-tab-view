@@ -1,7 +1,8 @@
 /* @flow */
 
 import * as React from 'react';
-import { ScrollView, View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default class Profile extends React.Component<*> {
   render() {

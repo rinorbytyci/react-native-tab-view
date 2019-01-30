@@ -6,7 +6,6 @@ import {
   TabView,
   TabBar,
   SceneMap,
-  type Route,
   type NavigationState,
 } from 'react-native-tab-view';
 import Article from './shared/Article';
@@ -14,12 +13,10 @@ import Albums from './shared/Albums';
 import Chat from './shared/Chat';
 import Contacts from './shared/Contacts';
 
-type State = NavigationState<
-  Route<{
-    key: string,
-    title: string,
-  }>
->;
+type State = NavigationState<{
+  key: string,
+  title: string,
+}>;
 
 const initialLayout = {
   height: 0,
@@ -67,7 +64,7 @@ export default class TopBarTextExample extends React.Component<*, State> {
   render() {
     return (
       <TabView
-        style={[styles.container, this.props.style]}
+        style={this.props.style}
         navigationState={this.state}
         renderScene={this._renderScene}
         renderTabBar={this._renderTabBar}
@@ -79,9 +76,6 @@ export default class TopBarTextExample extends React.Component<*, State> {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   tabbar: {
     backgroundColor: '#3f51b5',
   },

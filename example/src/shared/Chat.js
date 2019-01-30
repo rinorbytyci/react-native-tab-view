@@ -1,14 +1,8 @@
 /* @flow */
 
 import * as React from 'react';
-import {
-  ScrollView,
-  View,
-  Image,
-  Text,
-  TextInput,
-  StyleSheet,
-} from 'react-native';
+import { View, Image, Text, TextInput, StyleSheet } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const MESSAGES = [
   'okay',

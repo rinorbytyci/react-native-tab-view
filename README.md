@@ -6,8 +6,6 @@
 
 A cross-platform Tab View component for React Native.
 
-This is a JavaScript-only implementation of swipeable tab views. It's super customizable, allowing you to do things like coverflow.
-
 - [Run the example app to see it in action](https://expo.io/@satya164/react-native-tab-view-demos).
 - Checkout the [example/](https://github.com/react-native-community/react-native-tab-view/tree/master/example) folder for source code.
 
@@ -26,9 +24,13 @@ This is a JavaScript-only implementation of swipeable tab views. It's super cust
 
 ## Installation
 
+Open a Terminal in the project root and run:
+
 ```sh
 yarn add react-native-tab-view
 ```
+
+You also need to install and link [react-native-gesture-handler](https://github.com/kmagiera/react-native-gesture-handler) and [react-native-reanimated](https://github.com/kmagiera/react-native-reanimated). Follow the instructions on the linked repos to configure them. This step is unnecessary if you use Expo.
 
 ## Quick Start
 
@@ -88,13 +90,11 @@ React Navigation integration can be achieved by the [react-navigation-tabs](http
 
 ## API reference
 
-The package exports a `TabView` component which is the one you'd use to render the tab view, a `TabBar` component which is the default tab bar implementation, as well as several pager components for more fine-grained control.
-
-In a trivial app, you'd mostly only use `TabView` and `TabBar`.
+The package exports a `TabView` component which is the one you'd use to render the tab view, and a `TabBar` component which is the default tab bar implementation.
 
 ### `<TabView />`
 
-Container component responsible for rendering and managing tabs.
+Container component responsible for rendering and managing tabs. Follows material design styles by default.
 
 #### Example
 
@@ -115,12 +115,12 @@ Container component responsible for rendering and managing tabs.
 - `onIndexChange` (required): callback for when the current tab index changes, should update the navigation state.
 - `renderScene` (required): callback which returns a React Element to use as the scene for a tab.
 - `renderTabBar`: callback which returns a custom React Element to use as the tab bar.
-- `renderPager`: callback which returns a custom React Element to handle swipe gesture and animation.
 - `canJumpToTab`: callback which returns a boolean indicating whether jumping to the tab is allowed.
+- `swipeEnabled`: whether to enable swipe gestures.
+- `swipeDistanceThreshold`: minimum swipe distance to trigger page switch.
+- `swipeVelocityThreshold`: minimum swipe velocity to trigger page switch.
 - `initialLayout`: object containing the initial `height` and `width`, can be passed to prevent the one frame delay in rendering.
 - `tabBarPosition`: position of the tab bar, `'top'` or `'bottom'`. Defaults to `'top'`.
-
-Any other props are passed to the underlying pager.
 
 ### `<TabBar />`
 
@@ -153,84 +153,10 @@ renderTabBar={props =>
 - `pressOpacity`: opacity for pressed tab (iOS and Android < 5.0 only).
 - `scrollEnabled`: whether to enable scrollable tabs.
 - `bounces`: whether the tab bar bounces when scrolling.
-- `useNativeDriver`: whether to use native animations.
 - `tabStyle`: style object for the individual tabs in the tab bar.
 - `indicatorStyle`: style object for the active indicator.
 - `labelStyle`: style object for the tab item label.
 - `style`: style object for the tab bar.
-
-### `<PagerPan />`
-
-Cross-platform pager based on the [`PanResponder`](https://facebook.github.io/react-native/docs/panresponder.html).
-
-#### Props
-
-- `animationEnabled`: whether to enable page change animation.
-- `swipeEnabled`: whether to enable swipe gestures.
-- `swipeDistanceThreshold`: minimum swipe distance to trigger page switch.
-- `swipeVelocityThreshold`: minimum swipe velocity to trigger page switch.
-- `onSwipeStart`: optional callback when a swipe gesture starts.
-- `onSwipeEnd`: optional callback when a swipe gesture ends.
-- `onAnimationEnd`: optional callback when the transition animation ends.
-- `getTestID`: optional callback which receives the current scene and returns a test id for the tab.
-- `children`: React Element(s) to render.
-
-### `<PagerScroll />`
-
-Cross-platform pager based on [`ScrollView`](https://facebook.github.io/react-native/docs/scrollview.html) (default on iOS).
-
-#### Props
-
-- `animationEnabled`: whether to enable page change animation.
-- `swipeEnabled`: whether to enable swipe gestures.
-- `onSwipeStart`: optional callback when a swipe gesture starts.
-- `onSwipeEnd`: optional callback when a swipe gesture ends.
-- `onAnimationEnd`: optional callback when the transition animation ends.
-- `getTestID`: optional callback which receives the current scene and returns a test id for the tab.
-- `children`: React Element(s) to render.
-
-There are some caveats when using this pager on Android, such as poor support for intial index other than `0` and weird animation curves.
-
-### `<PagerAndroid />`
-
-Android only pager based on `ViewPagerAndroid` (default on Android).
-
-#### Props
-
-- `animationEnabled`: whether to enable page change animation.
-- `swipeEnabled`: whether to enable swipe gestures.
-- `onSwipeStart`: optional callback when a swipe gesture starts.
-- `onSwipeEnd`: optional callback when a swipe gesture ends.
-- `onAnimationEnd`: optional callback when the transition animation ends.
-- `keyboardDismissMode`: whether the keyboard gets dismissed in response to a drag in [ViewPagerAndroid](https://facebook.github.io/react-native/docs/viewpagerandroid.html#keyboarddismissmode) (Default: `on-drag`).
-- `getTestID`: optional callback which receives the current scene and returns a test id for the tab.
-- `children`: React Element(s) to render.
-
-### `<PagerExperimental />`
-
-Cross-platform pager component based on [`react-native-gesture-handler`](https://github.com/kmagiera/react-native-gesture-handler).
-
-#### Props
-
-- `GestureHandler`: the gesture handler module to use.
-- `animationEnabled`: whether to enable page change animation.
-- `swipeEnabled`: whether to enable swipe gestures.
-- `onSwipeStart`: optional callback when a swipe gesture starts.
-- `onSwipeEnd`: optional callback when a swipe gesture ends.
-- `onAnimationEnd`: optional callback when the transition animation ends.
-- `useNativeDriver`: whether to use native animations.
-- `getTestID`: optional callback which receives the current scene and returns a test id for the tab.
-- `children`: React Element(s) to render.
-
-This pager is still experimental. To use this pager, you'll need to [link the `react-native-gesture-handler` library](https://github.com/kmagiera/react-native-gesture-handler#installation), and pass it as a prop to the pager:
-
-```js
-import * as GestureHandler from 'react-native-gesture-handler';
-
-...
-
-<PagerExperimental {...props} GestureHandler={GestureHandler} />
-```
 
 ### `SceneMap`
 
@@ -281,23 +207,6 @@ Always define your components elsewhere in the top level of the file. If you pas
 - `TabView` cannot be nested inside another `TabView` or a horizontal `ScrollView` on Android. This is a limitation of the platform and we cannot fix it in the library.
 
 ## Optimization Tips
-
-### Use native driver
-
-Using native animations and gestures can greatly improve the performance. To use native animations and gestures, you will need to use `PagerExperimental` as your pager and pass `useNativeDriver` in `TabView`.
-
-```js
-<TabView
-  navigationState={this.state}
-  renderPager={this._renderPager}
-  renderScene={this._renderScene}
-  renderTabBar={this._renderTabBar}
-  onIndexChange={this._handleIndexChange}
-  useNativeDriver
-/>
-```
-
-_NOTE:_ Native animations are supported only for properties such as `opacity` and `translation`. If you are using a custom tab bar or indicator, you need to make sure that you animate only these style properties.
 
 ### Avoid unnecessary re-renders
 
