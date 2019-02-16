@@ -1,5 +1,7 @@
 # React Native Tab View
 
+## This fork inlcudes dynamic width support as suggested in Pull Request #544
+
 [![Build Status][build-badge]][build]
 [![Version][version-badge]][package]
 [![MIT License][license-badge]][license]
